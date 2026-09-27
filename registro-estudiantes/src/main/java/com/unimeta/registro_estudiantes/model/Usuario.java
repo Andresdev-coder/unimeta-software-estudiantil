@@ -26,4 +26,17 @@ public class Usuario {
 
     @Enumerated(EnumType.STRING)
     private Rol rol;
+
+    private String nombreCompleto;
+
+    @OneToOne
+    @JoinColumn(name = "estudiante_id", unique = true)
+    private Estudiante estudiante;
+
+    @ManyToMany
+    @JoinTable(
+            name = "profesor_materia",
+            joinColumns = @JoinColumn(name = "usuario_id"),
+            inverseJoinColumns = @JoinColumn(name = "materia_id"))
+    private java.util.Set<Materia> materiasAsignadas = new java.util.HashSet<>();
 }

@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { DollarSign, Plus, Search } from "lucide-react";
+import { Check, DollarSign, Plus, Search } from "lucide-react";
 import { toast } from "react-toastify";
 import Layout from "../components/Layout";
 import {
@@ -249,9 +249,10 @@ export default function Ingresos() {
                       {i.estado === "PENDIENTE" && (
                         <button
                           onClick={() => handleMarcarPagado(i.id)}
-                          className="text-xs text-blue-600 hover:text-blue-800 underline"
+                          className="inline-flex items-center gap-1.5 rounded-lg border border-emerald-200 dark:border-emerald-800 bg-emerald-50 dark:bg-emerald-950/50 px-3 py-1.5 text-xs font-medium text-emerald-700 dark:text-emerald-300 transition-colors hover:bg-emerald-100 dark:hover:bg-emerald-900/60"
                         >
-                          Marcar pagado
+                          <Check size={14} strokeWidth={2.5} />
+                          Confirmar pago
                         </button>
                       )}
                     </div>

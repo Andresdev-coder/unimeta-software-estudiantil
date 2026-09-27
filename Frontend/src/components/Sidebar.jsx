@@ -1,4 +1,5 @@
 import { NavLink } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
 import {
   LayoutGrid,
   Users,
@@ -10,7 +11,7 @@ import {
   Settings,
 } from "lucide-react";
 
-const links = [
+const enlacesAdmin = [
   { to: "/dashboard", icon: LayoutGrid, label: "Dashboard" },
   { to: "/estudiantes", icon: Users, label: "Estudiantes" },
   { to: "/cursos", icon: BookOpen, label: "Cursos" },
@@ -20,7 +21,14 @@ const links = [
   { to: "/configuracion", icon: Settings, label: "Configuración" },
 ];
 
+const enlacesRol = {
+  PROFESOR: [{ to: "/profesor", icon: BookOpen, label: "Espacio del profesor" }],
+  ESTUDIANTE: [{ to: "/estudiante", icon: GraduationCap, label: "Mi espacio académico" }],
+};
+
 export default function Sidebar() {
+  const { usuario } = useAuth();
+  const links = enlacesRol[usuario?.rol] || enlacesAdmin;
   return (
     <aside className="hidden md:flex flex-col items-center w-20 bg-white dark:bg-slate-800 border-r border-slate-100 dark:border-slate-700 py-6 gap-2">
       <div className="mb-6 p-2.5 rounded-xl bg-blue-700 text-white">

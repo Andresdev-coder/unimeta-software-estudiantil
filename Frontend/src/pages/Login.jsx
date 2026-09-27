@@ -15,9 +15,9 @@ export default function Login() {
     e.preventDefault();
     setCargando(true);
     try {
-      await login(username, password);
+      const sesion = await login(username, password);
       toast.success("Bienvenido a UNIMETA");
-      navigate("/dashboard");
+      navigate(sesion.rol === "ESTUDIANTE" ? "/estudiante" : sesion.rol === "PROFESOR" ? "/profesor" : "/dashboard");
     } catch (error) {
       toast.error("Usuario o contraseña incorrectos");
     } finally {
