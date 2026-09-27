@@ -1,0 +1,45 @@
+# Dependencias y artefactos generados
+**/node_modules/
+Frontend/dist/
+**/target/
+**/build/
+**/.gradle/
+
+# Archivos cargados por usuarios y datos locales
+registro-estudiantes/uploads/
+uploads/
+*.db
+*.sqlite
+
+# Configuracion local y secretos
+.env
+.env.*
+!.env.example
+**/application-local.properties
+**/application-local.yml
+**/application-local.yaml
+**/*.local.properties
+**/*.local.yml
+**/*.local.yaml
+*.pem
+*.key
+*.p12
+*.jks
+
+# Logs y archivos temporales
+*.log
+npm-debug.log*
+yarn-debug.log*
+pnpm-debug.log*
+logs/
+*.tmp
+
+# Sistema operativo y editores
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+!.vscode/extensions.json
+*.iml
+*.suo
+*.user
