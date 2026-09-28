@@ -60,7 +60,7 @@ export default function Configuracion() {
   return (
     <Layout title="Configuración">
       <div className="space-y-6">
-        <section className="bg-white dark:bg-slate-800 rounded-2xl shadow p-6 max-w-xl">
+        <section className="max-w-xl rounded-2xl bg-white p-4 shadow dark:bg-slate-800 sm:p-6">
           <h2 className="text-lg font-semibold text-slate-700 dark:text-slate-100 mb-4">Apariencia</h2>
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
@@ -80,7 +80,7 @@ export default function Configuracion() {
         </section>
 
         {usuario?.rol === "ADMIN" && <>
-          <section className="bg-white dark:bg-slate-800 rounded-2xl shadow p-6">
+          <section className="rounded-2xl bg-white p-4 shadow dark:bg-slate-800 sm:p-6">
             <div className="flex items-center gap-2 mb-5 text-slate-700 dark:text-slate-100">
               <UserPlus size={20} />
               <h2 className="text-lg font-semibold">Crear perfil académico</h2>
@@ -121,12 +121,12 @@ export default function Configuracion() {
             </form>
           </section>
 
-          <section className="bg-white dark:bg-slate-800 rounded-2xl shadow p-6">
+          <section className="rounded-2xl bg-white p-4 shadow dark:bg-slate-800 sm:p-6">
             <h2 className="text-lg font-semibold text-slate-700 dark:text-slate-100 mb-4">Perfiles registrados</h2>
             <div className="space-y-2">
-              {perfiles.map((perfil) => <div key={perfil.id} className="flex justify-between gap-3 rounded-lg bg-slate-50 dark:bg-slate-700 px-4 py-3 text-sm">
-                <span className="text-slate-700 dark:text-slate-100">{perfil.nombreCompleto} <span className="text-slate-400">({perfil.username})</span></span>
-                <span className="text-blue-600 dark:text-blue-300">{perfil.rol === "PROFESOR" ? "Profesor" : "Estudiante"}</span>
+              {perfiles.map((perfil) => <div key={perfil.id} className="flex flex-col justify-between gap-1 rounded-lg bg-slate-50 px-4 py-3 text-sm dark:bg-slate-700 sm:flex-row sm:gap-3">
+                <span className="min-w-0 break-words text-slate-700 dark:text-slate-100">{perfil.nombreCompleto} <span className="text-slate-400">({perfil.username})</span></span>
+                <span className="shrink-0 text-blue-600 dark:text-blue-300">{perfil.rol === "PROFESOR" ? "Profesor" : "Estudiante"}</span>
               </div>)}
               {perfiles.length === 0 && <p className="text-sm text-slate-500 dark:text-slate-300">Aún no hay perfiles creados.</p>}
             </div>

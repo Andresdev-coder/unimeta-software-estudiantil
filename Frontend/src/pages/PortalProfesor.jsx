@@ -31,7 +31,7 @@ export default function PortalProfesor() {
   };
 
   return <Layout title="Espacio del profesor">
-    <section className="bg-white dark:bg-slate-800 rounded-2xl shadow p-6 mb-5">
+    <section className="mb-5 min-w-0 rounded-2xl bg-white p-4 shadow dark:bg-slate-800 sm:p-6">
       <h2 className="text-lg font-semibold text-slate-700 dark:text-slate-100 mb-4">Registrar nota</h2>
       <form onSubmit={guardar} className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-3 items-end">
         <label className="text-sm text-slate-600 dark:text-slate-300">Materia
@@ -49,7 +49,7 @@ export default function PortalProfesor() {
         <button disabled={!estudianteId} className="md:col-span-2 xl:col-span-4 justify-self-start rounded-lg bg-blue-700 hover:bg-blue-800 disabled:opacity-50 text-white px-5 py-2.5">Guardar nota</button>
       </form>
     </section>
-    <section className="bg-white dark:bg-slate-800 rounded-2xl shadow p-6">
+    <section className="min-w-0 rounded-2xl bg-white p-4 shadow dark:bg-slate-800 sm:p-6">
       <h2 className="text-lg font-semibold text-slate-700 dark:text-slate-100 mb-4">Notas registradas por ti</h2>
       <div className="overflow-x-auto"><table className="w-full text-sm text-left"><thead className="bg-slate-50 dark:bg-slate-700 text-slate-500 dark:text-slate-300"><tr><th className="p-3">Estudiante</th><th className="p-3">Materia</th><th className="p-3">Actividad</th><th className="p-3">Nota</th></tr></thead><tbody>
         {notas.map((n) => <tr key={n.id} className="border-t border-slate-100 dark:border-slate-700 text-slate-700 dark:text-slate-200"><td className="p-3">{n.estudiante}</td><td className="p-3">{n.materia}</td><td className="p-3">{n.descripcion}</td><td className="p-3 font-semibold">{n.valor}</td></tr>)}

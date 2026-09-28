@@ -86,11 +86,11 @@ export default function Ingresos() {
 
   return (
     <Layout title="Ingresos">
-      <div className="flex items-center justify-between mb-6">
+      <div className="mb-6 flex flex-col items-stretch gap-3 sm:flex-row sm:items-center sm:justify-between">
         <p className="text-slate-500 dark:text-slate-300 text-sm">Registro y consulta de pagos</p>
         <button
           onClick={() => setFormAbierto(!formAbierto)}
-          className="flex items-center gap-1 bg-orange-600 hover:bg-orange-700 text-white text-sm px-4 py-2 rounded-lg transition-colors"
+          className="flex w-full items-center justify-center gap-1 whitespace-nowrap bg-orange-600 hover:bg-orange-700 text-white text-sm px-4 py-2 rounded-lg transition-colors sm:w-auto"
         >
           <Plus size={16} /> Registrar ingreso
         </button>
@@ -99,7 +99,7 @@ export default function Ingresos() {
       {formAbierto && (
         <form
           onSubmit={handleRegistrar}
-          className="bg-white dark:bg-slate-800 rounded-2xl shadow p-5 mb-6 flex gap-3 items-end flex-wrap"
+          className="mb-6 flex flex-col items-stretch gap-3 rounded-2xl bg-white p-4 shadow dark:bg-slate-800 sm:flex-row sm:flex-wrap sm:items-end sm:p-5"
         >
           <div className="flex-1 min-w-[200px]">
             <label className="text-xs text-slate-500">Matrícula</label>
@@ -116,7 +116,7 @@ export default function Ingresos() {
               ))}
             </select>
           </div>
-          <div className="w-40">
+          <div className="w-full sm:w-40">
             <label className="text-xs text-slate-500 dark:text-slate-300">Monto</label>
             <input
               type="number"
@@ -126,7 +126,7 @@ export default function Ingresos() {
               className="w-full mt-1 px-3 py-2 border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-700 text-slate-700 dark:text-slate-100 rounded-lg text-sm"
             />
           </div>
-          <div className="w-40">
+          <div className="w-full sm:w-40">
             <label className="text-xs text-slate-500 dark:text-slate-300">Estado</label>
             <select
               value={estado}
@@ -139,20 +139,20 @@ export default function Ingresos() {
           </div>
           <button
             type="submit"
-            className="py-2.5 px-5 rounded-lg bg-orange-600 text-white text-sm font-medium hover:bg-orange-700 transition-colors"
+            className="self-start rounded-lg bg-orange-600 px-5 py-2.5 text-sm font-medium text-white transition-colors hover:bg-orange-700"
           >
             Guardar
           </button>
         </form>
       )}
 
-      <div className="bg-white dark:bg-slate-800 rounded-2xl shadow p-5 mb-6">
+      <div className="mb-6 rounded-2xl bg-white p-4 shadow dark:bg-slate-800 sm:p-5">
         <h2 className="text-sm font-semibold text-slate-700 dark:text-slate-100 mb-3">
           Consultar historial por estudiante
         </h2>
         <form
           onSubmit={handleConsultar}
-          className="flex gap-3 items-end flex-wrap"
+          className="flex flex-col items-stretch gap-3 sm:flex-row sm:flex-wrap sm:items-end"
         >
           <div className="flex-1 min-w-[200px]">
             <label className="text-xs text-slate-500 dark:text-slate-300">Estudiante</label>
@@ -169,7 +169,7 @@ export default function Ingresos() {
               ))}
             </select>
           </div>
-          <div>
+          <div className="sm:w-40">
             <label className="text-xs text-slate-500 dark:text-slate-300">Desde</label>
             <input
               type="date"
@@ -178,7 +178,7 @@ export default function Ingresos() {
               className="w-full mt-1 px-3 py-2 border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-700 text-slate-700 dark:text-slate-100 rounded-lg text-sm"
             />
           </div>
-          <div>
+          <div className="sm:w-40">
             <label className="text-xs text-slate-500 dark:text-slate-300">Hasta</label>
             <input
               type="date"
@@ -189,15 +189,16 @@ export default function Ingresos() {
           </div>
           <button
             type="submit"
-            className="flex items-center gap-1 py-2.5 px-5 rounded-lg bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 dark:hover:bg-slate-600 text-slate-700 dark:text-slate-100 text-sm transition-colors"
+            className="flex w-full items-center justify-center gap-1 rounded-lg bg-slate-100 px-5 py-2.5 text-sm text-slate-700 transition-colors hover:bg-slate-200 dark:bg-slate-700 dark:text-slate-100 dark:hover:bg-slate-600 sm:w-auto"
           >
             <Search size={16} /> Buscar
           </button>
         </form>
       </div>
 
-      <div className="bg-white dark:bg-slate-800 rounded-2xl shadow overflow-hidden">
-        <table className="w-full text-sm">
+      <div className="overflow-hidden rounded-2xl bg-white shadow dark:bg-slate-800">
+        <div className="overflow-x-auto">
+        <table className="w-full min-w-[540px] text-sm">
           <thead className="bg-slate-50 dark:bg-slate-700 text-slate-500 dark:text-slate-300 text-left">
             <tr>
               <th className="px-4 py-3">Fecha</th>
@@ -262,6 +263,7 @@ export default function Ingresos() {
             )}
           </tbody>
         </table>
+        </div>
       </div>
     </Layout>
   );

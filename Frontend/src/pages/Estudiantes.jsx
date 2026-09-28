@@ -93,7 +93,7 @@ export default function Estudiantes() {
 
   return (
     <Layout title="Estudiantes">
-      <div className="flex items-center justify-between mb-6 gap-3">
+      <div className="mb-6 flex flex-col items-stretch gap-3 sm:flex-row sm:items-center sm:justify-between">
         <form
           onSubmit={handleBuscar}
           className="flex items-center gap-2 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg px-3 py-2 w-full max-w-sm"
@@ -109,14 +109,15 @@ export default function Estudiantes() {
 
         <button
           onClick={abrirNuevo}
-          className="flex items-center gap-1 bg-blue-700 hover:bg-blue-800 text-white text-sm px-4 py-2 rounded-lg transition-colors"
+          className="flex w-full items-center justify-center gap-1 whitespace-nowrap bg-blue-700 hover:bg-blue-800 text-white text-sm px-4 py-2 rounded-lg transition-colors sm:w-auto"
         >
           <Plus size={16} /> Nuevo estudiante
         </button>
       </div>
 
-      <div className="bg-white dark:bg-slate-800 rounded-2xl shadow overflow-hidden">
-        <table className="w-full text-sm">
+      <div className="overflow-hidden rounded-2xl bg-white shadow dark:bg-slate-800">
+        <div className="overflow-x-auto">
+        <table className="w-full min-w-[760px] text-sm">
           <thead className="bg-slate-50 dark:bg-slate-700 text-slate-500 dark:text-slate-300 text-left">
             <tr>
               <th className="px-4 py-3">Foto</th>
@@ -192,6 +193,7 @@ export default function Estudiantes() {
             )}
           </tbody>
         </table>
+        </div>
       </div>
 
       {modalAbierto && (

@@ -61,13 +61,13 @@ export default function Matriculas() {
 
   return (
     <Layout title="Matrículas">
-      <div className="flex items-center justify-between mb-6">
+      <div className="mb-6 flex flex-col items-stretch gap-3 sm:flex-row sm:items-center sm:justify-between">
         <p className="text-slate-500 dark:text-slate-300 text-sm">
           {matriculas.length} matrículas registradas
         </p>
         <button
           onClick={() => setFormAbierto(!formAbierto)}
-          className="flex items-center gap-1 bg-blue-700 hover:bg-blue-800 text-white text-sm px-4 py-2 rounded-lg transition-colors"
+          className="flex w-full items-center justify-center gap-1 whitespace-nowrap bg-blue-700 hover:bg-blue-800 text-white text-sm px-4 py-2 rounded-lg transition-colors sm:w-auto"
         >
           <Plus size={16} /> Nueva matrícula
         </button>
@@ -76,7 +76,7 @@ export default function Matriculas() {
       {formAbierto && (
         <form
           onSubmit={handleCrear}
-          className="bg-white dark:bg-slate-800 rounded-2xl shadow p-5 mb-6 flex gap-3 items-end"
+          className="mb-6 grid grid-cols-1 items-end gap-3 rounded-2xl bg-white p-4 shadow dark:bg-slate-800 sm:grid-cols-2 sm:p-5"
         >
           <div className="flex-1">
             <label className="text-xs text-slate-500 dark:text-slate-300">Estudiante</label>
@@ -110,15 +110,16 @@ export default function Matriculas() {
           </div>
           <button
             type="submit"
-            className="py-2.5 px-5 rounded-lg bg-blue-700 text-white text-sm font-medium hover:bg-blue-800 transition-colors"
+            className="justify-self-start rounded-lg bg-blue-700 px-5 py-2.5 text-sm font-medium text-white transition-colors hover:bg-blue-800 sm:col-span-2"
           >
             Guardar
           </button>
         </form>
       )}
 
-      <div className="bg-white dark:bg-slate-800 rounded-2xl shadow overflow-hidden">
-        <table className="w-full text-sm">
+      <div className="overflow-hidden rounded-2xl bg-white shadow dark:bg-slate-800">
+        <div className="overflow-x-auto">
+        <table className="w-full min-w-[600px] text-sm">
           <thead className="bg-slate-50 dark:bg-slate-700 text-slate-500 dark:text-slate-300 text-left">
             <tr>
               <th className="px-4 py-3">Estudiante</th>
@@ -170,6 +171,7 @@ export default function Matriculas() {
             )}
           </tbody>
         </table>
+        </div>
       </div>
     </Layout>
   );

@@ -26,10 +26,10 @@ export default function Login() {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-slate-100">
+    <div className="flex min-h-screen items-center justify-center bg-slate-100 p-4">
       <form
         onSubmit={handleSubmit}
-        className="w-80 bg-white rounded-xl shadow-lg p-10 flex flex-col"
+        className="flex w-full max-w-sm flex-col rounded-xl bg-white p-6 shadow-lg sm:p-10"
       >
         <div className="flex flex-col items-center mb-6">
           <LogIn size={32} className="text-blue-700" />

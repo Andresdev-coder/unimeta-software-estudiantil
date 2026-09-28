@@ -64,13 +64,13 @@ export default function Cursos() {
 
   return (
     <Layout title="Cursos">
-      <div className="flex items-center justify-between mb-6">
+      <div className="mb-6 flex flex-col items-stretch gap-3 sm:flex-row sm:items-center sm:justify-between">
         <p className="text-slate-500 dark:text-slate-300 text-sm">
           {cursos.length} cursos registrados
         </p>
         <button
           onClick={() => setFormAbierto(!formAbierto)}
-          className="flex items-center gap-1 bg-emerald-700 hover:bg-emerald-800 text-white text-sm px-4 py-2 rounded-lg transition-colors"
+          className="flex w-full items-center justify-center gap-1 whitespace-nowrap bg-emerald-700 hover:bg-emerald-800 text-white text-sm px-4 py-2 rounded-lg transition-colors sm:w-auto"
         >
           <Plus size={16} /> Nuevo curso
         </button>
@@ -79,7 +79,7 @@ export default function Cursos() {
       {formAbierto && (
         <form
           onSubmit={handleCrear}
-          className="bg-white dark:bg-slate-800 rounded-2xl shadow p-5 mb-6 flex gap-3 items-end"
+          className="mb-6 flex flex-col items-stretch gap-3 rounded-2xl bg-white p-4 shadow dark:bg-slate-800 sm:flex-row sm:items-end sm:p-5"
         >
           <div className="flex-1">
             <label className="text-xs text-slate-500 dark:text-slate-300">Nombre del curso</label>
@@ -132,7 +132,7 @@ export default function Cursos() {
                 )}
               </div>
 
-              <div className="flex gap-2">
+              <div className="flex flex-col gap-2 sm:flex-row">
                 <select
                   value={seleccion[curso.id] || ""}
                   onChange={(e) =>

@@ -28,7 +28,7 @@ export default function PortalEstudiante() {
 
   return <Layout title="Mi espacio académico">
     <div className="grid grid-cols-1 xl:grid-cols-2 gap-5">
-      <section className="bg-white dark:bg-slate-800 rounded-2xl shadow p-6">
+      <section className="min-w-0 bg-white dark:bg-slate-800 rounded-2xl shadow p-4 sm:p-6">
         <h2 className="text-lg font-semibold text-slate-700 dark:text-slate-100 mb-1">Hola{resumen ? `, ${resumen.nombre}` : ""}</h2>
         <p className="text-sm text-slate-500 dark:text-slate-300 mb-5">Tus materias y calificaciones</p>
         <div className="flex flex-wrap gap-2 mb-6">
@@ -37,7 +37,7 @@ export default function PortalEstudiante() {
         </div>
         <h3 className="font-semibold text-slate-700 dark:text-slate-100 mb-3">Notas</h3>
         <div className="overflow-x-auto">
-          <table className="w-full text-sm text-left">
+          <table className="w-full min-w-[580px] text-sm text-left">
             <thead className="text-slate-500 dark:text-slate-300 bg-slate-50 dark:bg-slate-700"><tr><th className="p-3">Materia</th><th className="p-3">Actividad</th><th className="p-3">Nota</th><th className="p-3">Profesor</th></tr></thead>
             <tbody>{resumen?.notas?.map((nota) => <tr key={nota.id} className="border-t border-slate-100 dark:border-slate-700 text-slate-700 dark:text-slate-200"><td className="p-3">{nota.materia}</td><td className="p-3">{nota.descripcion}</td><td className="p-3 font-semibold">{nota.valor}</td><td className="p-3">{nota.profesor}</td></tr>)}
               {resumen?.notas?.length === 0 && <tr><td colSpan="4" className="p-5 text-center text-slate-500 dark:text-slate-300">Todavía no hay notas registradas.</td></tr>}</tbody>
@@ -45,7 +45,7 @@ export default function PortalEstudiante() {
         </div>
       </section>
 
-      <section className="bg-white dark:bg-slate-800 rounded-2xl shadow p-6 flex flex-col min-h-[460px]">
+      <section className="min-w-0 bg-white dark:bg-slate-800 rounded-2xl shadow p-4 sm:p-6 flex flex-col min-h-[460px]">
         <h2 className="flex items-center gap-2 text-lg font-semibold text-slate-700 dark:text-slate-100 mb-1"><MessageCircle size={19} /> Sala común</h2>
         <p className="text-sm text-slate-500 dark:text-slate-300 mb-4">Conversación compartida entre estudiantes</p>
         <div className="flex-1 overflow-y-auto space-y-3 rounded-xl bg-slate-50 dark:bg-slate-900 p-4 mb-4">

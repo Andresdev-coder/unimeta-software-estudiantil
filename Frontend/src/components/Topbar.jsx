@@ -12,12 +12,12 @@ export default function Topbar({ title }) {
   };
 
   return (
-    <header className="flex items-center justify-between bg-white dark:bg-slate-800 border-b border-slate-100 dark:border-slate-700 px-6 py-4">
-      <h1 className="text-lg font-semibold text-slate-800 dark:text-slate-100">
+    <header className="flex min-w-0 items-center justify-between gap-3 bg-white dark:bg-slate-800 border-b border-slate-100 dark:border-slate-700 px-4 py-3 sm:px-6 sm:py-4">
+      <h1 className="min-w-0 truncate text-base font-semibold text-slate-800 dark:text-slate-100 sm:text-lg">
         {title}
       </h1>
 
-      <div className="flex items-center gap-4">
+      <div className="flex shrink-0 items-center gap-1 sm:gap-4">
         <div className="hidden sm:flex items-center gap-2 bg-slate-50 dark:bg-slate-700 px-3 py-2 rounded-lg w-64">
           <Search size={16} className="text-slate-400" />
           <input
@@ -27,7 +27,7 @@ export default function Topbar({ title }) {
           />
         </div>
 
-        <button className="relative p-2 rounded-lg hover:bg-slate-50 text-slate-500">
+        <button aria-label="Notificaciones" className="relative hidden p-2 rounded-lg hover:bg-slate-50 text-slate-500 sm:block">
           <Bell size={18} />
         </button>
 
