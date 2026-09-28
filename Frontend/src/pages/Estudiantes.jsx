@@ -12,6 +12,8 @@ import {
   subirFotoEstudiante,
 } from "../services/estudiantesService";
 
+const API_URL = import.meta.env.VITE_API_URL || "http://localhost:8080";
+
 export default function Estudiantes() {
   const [estudiantes, setEstudiantes] = useState([]);
   const [cargando, setCargando] = useState(true);
@@ -153,7 +155,7 @@ export default function Estudiantes() {
                   <td className="px-4 py-3">
                     {est.fotoUrl ? (
                       <img
-                        src={`http://localhost:8080${est.fotoUrl}`}
+                        src={`${API_URL}${est.fotoUrl}`}
                         alt={est.nombres}
                         className="w-9 h-9 rounded-full object-cover"
                       />
