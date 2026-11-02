@@ -2,6 +2,7 @@ import api from "./api";
 
 export const crearPerfil = (data) => api.post("/api/admin/perfiles", data).then((r) => r.data);
 export const listarPerfiles = () => api.get("/api/admin/perfiles").then((r) => r.data);
+export const cambiarPassword = (data) => api.put("/api/auth/change-password", data);
 export const resumenEstudiante = () => api.get("/api/estudiante/mi-resumen").then((r) => r.data);
 export const materiasProfesor = () => api.get("/api/profesor/materias").then((r) => r.data);
 export const notasProfesor = () => api.get("/api/profesor/notas").then((r) => r.data);

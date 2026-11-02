@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react";
-import { Moon, Sun, UserPlus } from "lucide-react";
+import { KeyRound, Moon, Sun, UserPlus } from "lucide-react";
 import { toast } from "react-toastify";
 import Layout from "../components/Layout";
 import { useTheme } from "../context/ThemeContext";
 import { useAuth } from "../context/AuthContext";
 import { listarEstudiantes } from "../services/estudiantesService";
 import { listarMaterias } from "../services/materiasService";
-import { crearPerfil, listarPerfiles } from "../services/portalService";
+import { cambiarPassword, crearPerfil, listarPerfiles } from "../services/portalService";
 
 export default function Configuracion() {
   const { modoOscuro, alternarTema } = useTheme();
@@ -20,6 +20,10 @@ export default function Configuracion() {
   const [estudiantes, setEstudiantes] = useState([]);
   const [materias, setMaterias] = useState([]);
   const [perfiles, setPerfiles] = useState([]);
+  const [passwordActual, setPasswordActual] = useState("");
+  const [passwordNueva, setPasswordNueva] = useState("");
+  const [confirmarPassword, setConfirmarPassword] = useState("");
+  const [guardandoPassword, setGuardandoPassword] = useState(false);
 
   const cargarPerfiles = async () => {
     try { setPerfiles(await listarPerfiles()); }
@@ -54,6 +58,27 @@ export default function Configuracion() {
     }
   };
 
+  const actualizarPassword = async (e) => {
+    e.preventDefault();
+    if (passwordNueva !== confirmarPassword) {
+      toast.error("La nueva contraseña y su confirmación no coinciden");
+      return;
+    }
+
+    setGuardandoPassword(true);
+    try {
+      await cambiarPassword({ passwordActual, passwordNueva });
+      toast.success("Contraseña actualizada correctamente");
+      setPasswordActual("");
+      setPasswordNueva("");
+      setConfirmarPassword("");
+    } catch (error) {
+      toast.error(error.response?.data?.message || "No se pudo cambiar la contraseña. Verifica la contraseña actual.");
+    } finally {
+      setGuardandoPassword(false);
+    }
+  };
+
   const toggleMateria = (id) => setMateriasIds((actuales) =>
     actuales.includes(id) ? actuales.filter((actual) => actual !== id) : [...actuales, id]);
 
@@ -80,6 +105,27 @@ export default function Configuracion() {
         </section>
 
         {usuario?.rol === "ADMIN" && <>
+          <section className="max-w-xl rounded-2xl bg-white p-4 shadow dark:bg-slate-800 sm:p-6">
+            <div className="mb-5 flex items-center gap-2 text-slate-700 dark:text-slate-100">
+              <KeyRound size={20} />
+              <h2 className="text-lg font-semibold">Cambiar contraseña de administrador</h2>
+            </div>
+            <form onSubmit={actualizarPassword} className="space-y-4">
+              <label className="block text-sm text-slate-600 dark:text-slate-300">Contraseña actual
+                <input required type="password" autoComplete="current-password" value={passwordActual} onChange={(e) => setPasswordActual(e.target.value)} className="mt-1 w-full rounded-lg border border-slate-200 bg-white p-2.5 text-slate-700 dark:border-slate-600 dark:bg-slate-700 dark:text-slate-100" />
+              </label>
+              <label className="block text-sm text-slate-600 dark:text-slate-300">Nueva contraseña (mínimo 8 caracteres)
+                <input required minLength={8} maxLength={100} type="password" autoComplete="new-password" value={passwordNueva} onChange={(e) => setPasswordNueva(e.target.value)} className="mt-1 w-full rounded-lg border border-slate-200 bg-white p-2.5 text-slate-700 dark:border-slate-600 dark:bg-slate-700 dark:text-slate-100" />
+              </label>
+              <label className="block text-sm text-slate-600 dark:text-slate-300">Confirmar nueva contraseña
+                <input required minLength={8} maxLength={100} type="password" autoComplete="new-password" value={confirmarPassword} onChange={(e) => setConfirmarPassword(e.target.value)} className="mt-1 w-full rounded-lg border border-slate-200 bg-white p-2.5 text-slate-700 dark:border-slate-600 dark:bg-slate-700 dark:text-slate-100" />
+              </label>
+              <button disabled={guardandoPassword} className="rounded-lg bg-blue-700 px-5 py-2.5 text-white hover:bg-blue-800 disabled:cursor-not-allowed disabled:opacity-60">
+                {guardandoPassword ? "Actualizando..." : "Cambiar contraseña"}
+              </button>
+            </form>
+          </section>
+
           <section className="rounded-2xl bg-white p-4 shadow dark:bg-slate-800 sm:p-6">
             <div className="flex items-center gap-2 mb-5 text-slate-700 dark:text-slate-100">
               <UserPlus size={20} />
