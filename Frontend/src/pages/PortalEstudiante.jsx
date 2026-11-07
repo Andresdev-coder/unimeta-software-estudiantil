@@ -1,12 +1,13 @@
 import { useCallback, useEffect, useState } from "react";
-import { Send, BookOpen, MessageCircle } from "lucide-react";
+import { Send, BookOpen, MessageCircle, Bell, CalendarDays } from "lucide-react";
 import { toast } from "react-toastify";
 import Layout from "../components/Layout";
-import { resumenEstudiante, listarMensajes, enviarMensaje } from "../services/portalService";
+import { resumenEstudiante, listarMensajes, enviarMensaje, notificacionesEstudiante } from "../services/portalService";
 
 export default function PortalEstudiante() {
   const [resumen, setResumen] = useState(null);
   const [mensajes, setMensajes] = useState([]);
+  const [notificaciones, setNotificaciones] = useState([]);
   const [mensaje, setMensaje] = useState("");
   const cargarMensajes = useCallback(async () => {
     try { setMensajes(await listarMensajes()); } catch { /* mantiene la sala visible si falla un sondeo */ }
@@ -14,6 +15,7 @@ export default function PortalEstudiante() {
 
   useEffect(() => {
     resumenEstudiante().then(setResumen).catch(() => toast.error("No se pudo cargar tu información académica"));
+    notificacionesEstudiante().then(setNotificaciones).catch(() => toast.error("No se pudieron cargar las notificaciones"));
     cargarMensajes();
     const intervalo = setInterval(cargarMensajes, 5000);
     return () => clearInterval(intervalo);
@@ -42,6 +44,18 @@ export default function PortalEstudiante() {
             <tbody>{resumen?.notas?.map((nota) => <tr key={nota.id} className="border-t border-slate-100 dark:border-slate-700 text-slate-700 dark:text-slate-200"><td className="p-3">{nota.materia}</td><td className="p-3">{nota.descripcion}</td><td className="p-3 font-semibold">{nota.valor}</td><td className="p-3">{nota.profesor}</td></tr>)}
               {resumen?.notas?.length === 0 && <tr><td colSpan="4" className="p-5 text-center text-slate-500 dark:text-slate-300">Todavía no hay notas registradas.</td></tr>}</tbody>
           </table>
+        </div>
+      </section>
+
+      <section className="min-w-0 bg-white dark:bg-slate-800 rounded-2xl shadow p-4 sm:p-6">
+        <h2 className="flex items-center gap-2 text-lg font-semibold text-slate-700 dark:text-slate-100 mb-4"><Bell size={19} /> Notificaciones de tus profesores</h2>
+        <div className="space-y-3">
+          {notificaciones.map((aviso) => <article key={aviso.id} className="rounded-xl border border-slate-100 bg-slate-50 p-4 dark:border-slate-700 dark:bg-slate-900">
+            <div className="flex flex-wrap items-start justify-between gap-2"><div><h3 className="font-semibold text-slate-800 dark:text-slate-100">{aviso.titulo}</h3><p className="mt-1 text-xs text-blue-700 dark:text-blue-300">{aviso.curso} · {aviso.profesor}</p></div><time className="text-xs text-slate-400">{new Date(aviso.fechaCreacion).toLocaleString("es-CO")}</time></div>
+            <p className="mt-3 whitespace-pre-wrap text-sm text-slate-600 dark:text-slate-300">{aviso.mensaje}</p>
+            {aviso.fechaEvento && <p className="mt-3 flex items-center gap-1 text-xs text-slate-500 dark:text-slate-400"><CalendarDays size={14} />Evento: {new Date(aviso.fechaEvento).toLocaleString("es-CO")}</p>}
+          </article>)}
+          {notificaciones.length === 0 && <p className="rounded-xl bg-slate-50 p-5 text-center text-sm text-slate-500 dark:bg-slate-900 dark:text-slate-300">No tienes notificaciones por ahora.</p>}
         </div>
       </section>
 

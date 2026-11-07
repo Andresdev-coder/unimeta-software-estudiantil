@@ -1,11 +1,15 @@
 import { useEffect, useState } from "react";
+import { Bell, CalendarDays } from "lucide-react";
 import { toast } from "react-toastify";
 import Layout from "../components/Layout";
 import {
   crearNota,
+  crearNotificacion,
+  cursosNotificacionesProfesor,
   estudiantesMateria,
   materiasProfesor,
   notasProfesor,
+  notificacionesProfesor,
 } from "../services/portalService";
 
 export default function PortalProfesor() {
@@ -16,6 +20,12 @@ export default function PortalProfesor() {
   const [estudianteId, setEstudianteId] = useState("");
   const [valor, setValor] = useState("");
   const [descripcion, setDescripcion] = useState("");
+  const [avisos, setAvisos] = useState([]);
+  const [tituloAviso, setTituloAviso] = useState("");
+  const [mensajeAviso, setMensajeAviso] = useState("");
+  const [fechaEvento, setFechaEvento] = useState("");
+  const [cursosAviso, setCursosAviso] = useState([]);
+  const [cursoAvisoId, setCursoAvisoId] = useState("");
 
   const cargarNotas = async () => {
     try {
@@ -29,6 +39,8 @@ export default function PortalProfesor() {
       .then(setMaterias)
       .catch(() => toast.error("No se pudieron cargar tus materias"));
     cargarNotas();
+    notificacionesProfesor().then(setAvisos).catch(() => toast.error("No se pudieron cargar tus notificaciones"));
+    cursosNotificacionesProfesor().then(setCursosAviso).catch(() => toast.error("No se pudieron cargar tus cursos"));
   }, []);
   useEffect(() => {
     if (!materiaId) {
@@ -59,6 +71,25 @@ export default function PortalProfesor() {
       toast.error(
         error.response?.data?.message || "No se pudo registrar la nota",
       );
+    }
+  };
+
+  const guardarAviso = async (e) => {
+    e.preventDefault();
+    try {
+      await crearNotificacion({
+        cursoId: Number(cursoAvisoId),
+        titulo: tituloAviso,
+        mensaje: mensajeAviso,
+        fechaEvento: fechaEvento || null,
+      });
+      toast.success("Notificación enviada a los estudiantes de la materia");
+      setTituloAviso("");
+      setMensajeAviso("");
+      setFechaEvento("");
+      setAvisos(await notificacionesProfesor());
+    } catch (error) {
+      toast.error(error.response?.data?.message || "No se pudo enviar la notificación");
     }
   };
 
@@ -139,6 +170,36 @@ export default function PortalProfesor() {
             Guardar nota
           </button>
         </form>
+      </section>
+      <section className="mb-5 min-w-0 rounded-2xl bg-white p-4 shadow dark:bg-slate-800 sm:p-6">
+        <h2 className="mb-1 flex items-center gap-2 text-lg font-semibold text-slate-700 dark:text-slate-100"><Bell size={19} /> Notificar a mis estudiantes</h2>
+        <p className="mb-4 text-sm text-slate-500 dark:text-slate-300">El aviso llegará a los estudiantes matriculados en el curso seleccionado.</p>
+        <form onSubmit={guardarAviso} className="grid grid-cols-1 items-end gap-3 md:grid-cols-2">
+          <label className="text-sm text-slate-600 dark:text-slate-300">Curso
+            <select required value={cursoAvisoId} onChange={(e) => setCursoAvisoId(e.target.value)} className="mt-1 w-full rounded-lg border border-slate-200 bg-white p-2.5 text-slate-700 dark:border-slate-600 dark:bg-slate-700 dark:text-slate-100">
+              <option value="">Seleccionar...</option>
+              {cursosAviso.map((curso) => <option key={curso.id} value={curso.id}>{curso.nombre}</option>)}
+            </select>
+          </label>
+          <label className="text-sm text-slate-600 dark:text-slate-300">Título
+            <input required maxLength="120" value={tituloAviso} onChange={(e) => setTituloAviso(e.target.value)} className="mt-1 w-full rounded-lg border border-slate-200 bg-white p-2.5 text-slate-700 dark:border-slate-600 dark:bg-slate-700 dark:text-slate-100" />
+          </label>
+          <label className="text-sm text-slate-600 dark:text-slate-300 md:col-span-2">Mensaje
+            <textarea required maxLength="1000" rows="3" value={mensajeAviso} onChange={(e) => setMensajeAviso(e.target.value)} className="mt-1 w-full resize-y rounded-lg border border-slate-200 bg-white p-2.5 text-slate-700 dark:border-slate-600 dark:bg-slate-700 dark:text-slate-100" />
+          </label>
+          <label className="text-sm text-slate-600 dark:text-slate-300">Fecha del evento (opcional)
+            <input type="datetime-local" value={fechaEvento} onChange={(e) => setFechaEvento(e.target.value)} className="mt-1 w-full rounded-lg border border-slate-200 bg-white p-2.5 text-slate-700 dark:border-slate-600 dark:bg-slate-700 dark:text-slate-100" />
+          </label>
+          <button disabled={!cursoAvisoId} className="justify-self-start rounded-lg bg-blue-700 px-5 py-2.5 text-white hover:bg-blue-800 disabled:opacity-50">Enviar notificación</button>
+        </form>
+        {avisos.length > 0 && <div className="mt-5 space-y-3 border-t border-slate-100 pt-4 dark:border-slate-700">
+          <h3 className="text-sm font-semibold text-slate-700 dark:text-slate-100">Notificaciones enviadas</h3>
+          {avisos.map((aviso) => <article key={aviso.id} className="rounded-xl bg-slate-50 p-3 dark:bg-slate-700/60">
+            <div className="flex flex-wrap items-center justify-between gap-2"><strong className="text-sm text-slate-800 dark:text-slate-100">{aviso.titulo}</strong><span className="text-xs text-blue-700 dark:text-blue-300">{aviso.curso}</span></div>
+            <p className="mt-1 whitespace-pre-wrap text-sm text-slate-600 dark:text-slate-300">{aviso.mensaje}</p>
+            {aviso.fechaEvento && <p className="mt-2 flex items-center gap-1 text-xs text-slate-500 dark:text-slate-400"><CalendarDays size={14} />{new Date(aviso.fechaEvento).toLocaleString("es-CO")}</p>}
+          </article>)}
+        </div>}
       </section>
       <section className="min-w-0 rounded-2xl bg-white p-4 shadow dark:bg-slate-800 sm:p-6">
         <h2 className="text-lg font-semibold text-slate-700 dark:text-slate-100 mb-4">

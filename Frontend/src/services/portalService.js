@@ -8,5 +8,9 @@ export const materiasProfesor = () => api.get("/api/profesor/materias").then((r)
 export const notasProfesor = () => api.get("/api/profesor/notas").then((r) => r.data);
 export const estudiantesMateria = (materiaId) => api.get(`/api/profesor/materias/${materiaId}/estudiantes`).then((r) => r.data);
 export const crearNota = (data) => api.post("/api/profesor/notas", data).then((r) => r.data);
+export const notificacionesProfesor = () => api.get("/api/profesor/notificaciones").then((r) => r.data);
+export const cursosNotificacionesProfesor = () => api.get("/api/profesor/notificaciones/cursos").then((r) => r.data);
+export const crearNotificacion = (data) => api.post("/api/profesor/notificaciones", data).then((r) => r.data);
+export const notificacionesEstudiante = () => api.get("/api/estudiante/notificaciones").then((r) => r.data);
 export const listarMensajes = () => api.get("/api/chat").then((r) => r.data);
 export const enviarMensaje = (mensaje) => api.post("/api/chat", { mensaje }).then((r) => r.data);
