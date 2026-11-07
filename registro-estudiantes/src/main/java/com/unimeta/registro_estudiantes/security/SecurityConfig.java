@@ -21,12 +21,19 @@ import org.springframework.beans.factory.annotation.Value;
 import lombok.RequiredArgsConstructor;
 
 import java.util.List;
+import jakarta.servlet.http.HttpServletResponse;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity
 @RequiredArgsConstructor
 public class SecurityConfig {
+
+    private static final Logger log = LoggerFactory.getLogger(SecurityConfig.class);
 
     private final JwtAuthFilter jwtAuthFilter;
 
@@ -62,6 +69,13 @@ public class SecurityConfig {
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .csrf(csrf -> csrf.disable())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .exceptionHandling(errors -> errors.accessDeniedHandler((request, response, exception) -> {
+                    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+                    log.warn("Acceso denegado: {} {} usuario={} roles={}", request.getMethod(), request.getRequestURI(),
+                            authentication == null ? "anónimo" : authentication.getName(),
+                            authentication == null ? "ninguno" : authentication.getAuthorities());
+                    response.sendError(HttpServletResponse.SC_FORBIDDEN, "Permiso insuficiente para esta operación");
+                }))
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                         .requestMatchers("/api/auth/**").permitAll()
@@ -70,8 +84,11 @@ public class SecurityConfig {
                         .requestMatchers("/api/estudiante/**").hasRole("ESTUDIANTE")
                         .requestMatchers("/api/profesor/**").hasRole("PROFESOR")
                         .requestMatchers("/api/chat/**").hasRole("ESTUDIANTE")
-                        .requestMatchers("/api/estudiantes/**", "/api/cursos/**", "/api/materias/**",
-                                "/api/matriculas/**", "/api/ingresos/**", "/api/dashboard/**")
+                        .requestMatchers(HttpMethod.GET, "/api/estudiantes/**").hasAnyRole("ADMIN", "COORDINADOR")
+                        .requestMatchers(HttpMethod.POST, "/api/estudiantes/**").hasAnyRole("ADMIN", "COORDINADOR")
+                        .requestMatchers(HttpMethod.PUT, "/api/estudiantes/**").hasAnyRole("ADMIN", "COORDINADOR")
+                        .requestMatchers(HttpMethod.DELETE, "/api/estudiantes/**").hasAnyRole("ADMIN", "COORDINADOR")
+                        .requestMatchers("/api/cursos/**", "/api/materias/**", "/api/matriculas/**", "/api/ingresos/**", "/api/dashboard/**")
                                 .hasAnyRole("ADMIN", "COORDINADOR")
                         .anyRequest().authenticated())
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);

@@ -20,6 +20,8 @@ export default function Estudiantes() {
   const [texto, setTexto] = useState("");
   const [modalAbierto, setModalAbierto] = useState(false);
   const [estudianteEditar, setEstudianteEditar] = useState(null);
+  const [estudianteEliminar, setEstudianteEliminar] = useState(null);
+  const [eliminando, setEliminando] = useState(false);
 
   const cargar = async () => {
     setCargando(true);
@@ -81,13 +83,27 @@ export default function Estudiantes() {
   };
 
   const handleEliminar = async (id) => {
-    if (!confirm("¿Eliminar este estudiante?")) return;
+    setEstudianteEliminar(estudiantes.find((estudiante) => estudiante.id === id) || { id });
+  };
+
+  const confirmarEliminar = async () => {
+    if (!estudianteEliminar) return;
+    setEliminando(true);
     try {
-      await eliminarEstudiante(id);
+      await eliminarEstudiante(estudianteEliminar.id);
       toast.success("Estudiante eliminado");
-      cargar();
+      setEstudianteEliminar(null);
+      await cargar();
     } catch (err) {
-      toast.error("Error al eliminar");
+      const status = err.response?.status;
+      const detalle = err.response?.data?.message || err.response?.data?.mensaje;
+      toast.error(detalle || (status === 403
+        ? "Tu cuenta no tiene permiso para eliminar estudiantes. Cierra sesión y vuelve a ingresar."
+        : status === 409
+          ? "No se puede eliminar porque el estudiante tiene información académica vinculada."
+          : "No se pudo eliminar el estudiante."));
+    } finally {
+      setEliminando(false);
     }
   };
 
@@ -202,6 +218,19 @@ export default function Estudiantes() {
           onClose={() => setModalAbierto(false)}
           onGuardar={handleGuardar}
         />
+      )}
+
+      {estudianteEliminar && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/60 p-4" onMouseDown={(e) => { if (e.target === e.currentTarget && !eliminando) setEstudianteEliminar(null); }}>
+          <section role="alertdialog" aria-modal="true" aria-labelledby="confirmar-eliminar-titulo" className="w-full max-w-md rounded-2xl bg-white p-6 shadow-2xl dark:bg-slate-800">
+            <h2 id="confirmar-eliminar-titulo" className="text-lg font-semibold text-slate-900 dark:text-white">Eliminar estudiante</h2>
+            <p className="mt-2 text-sm text-slate-600 dark:text-slate-300">¿Quieres eliminar a <strong>{estudianteEliminar.nombres} {estudianteEliminar.apellidos}</strong>? Esta acción no se puede deshacer.</p>
+            <div className="mt-6 flex justify-end gap-3">
+              <button type="button" disabled={eliminando} onClick={() => setEstudianteEliminar(null)} className="rounded-lg border border-slate-300 px-4 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50 disabled:opacity-50 dark:border-slate-600 dark:text-slate-200 dark:hover:bg-slate-700">Cancelar</button>
+              <button type="button" disabled={eliminando} onClick={confirmarEliminar} className="rounded-lg bg-red-600 px-4 py-2 text-sm font-semibold text-white hover:bg-red-700 disabled:opacity-50">{eliminando ? "Eliminando…" : "Eliminar"}</button>
+            </div>
+          </section>
+        </div>
       )}
     </Layout>
   );
